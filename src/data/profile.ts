@@ -19,8 +19,7 @@ export const profile = {
   links: {
     github: "https://github.com/abijithmr",
     linkedin: "https://www.linkedin.com/in/abijithmr/",
-    // TODO: replace with Abijith's real address.
-    email: "abijith@example.com",
+    email: "abijithrajeevan28@gmail.com",
     // Drop the PDF at public/resume.pdf.
     resume: "/resume.pdf",
   },
