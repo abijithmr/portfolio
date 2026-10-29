@@ -57,7 +57,7 @@ export function Hero() {
       </motion.div>
 
       {/* Photo tile: circular portrait with a frosted badge floating over its lower edge */}
-      <motion.div variants={settle} className="tile flex items-center justify-center p-8">
+      <motion.div variants={settle} className="tile group flex items-center justify-center p-8">
         <div className="relative">
           <div className="relative size-44 overflow-hidden rounded-full bg-chip ring-1 ring-line sm:size-52">
             <Image
@@ -66,18 +66,21 @@ export function Hero() {
               fill
               priority
               sizes="208px"
-              className="object-cover"
+              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
             />
           </div>
           <p className="glass absolute -bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium">
-            <span aria-hidden className="size-2 rounded-full bg-sun" />
+            <span aria-hidden className="relative flex size-2">
+              <span className="absolute inline-flex size-full rounded-full bg-sun opacity-60 motion-safe:animate-ping" />
+              <span className="relative inline-flex size-2 rounded-full bg-sun" />
+            </span>
             {education.status}, graduating {education.graduation}
           </p>
         </div>
       </motion.div>
 
       {/* Education: solid cobalt */}
-      <motion.div variants={settle} className="rounded-[var(--radius-tile)] bg-cobalt p-7 text-white">
+      <motion.div variants={settle} className="rounded-[var(--radius-tile)] bg-cobalt p-7 text-white transition-transform duration-300 hover:-translate-y-0.5">
         <h2 className="text-xl font-medium tracking-tight">Education</h2>
         <p className="mt-4 font-medium leading-snug">{education.degree}</p>
         <p className="mt-2 text-sm leading-relaxed text-white/80">
@@ -87,7 +90,7 @@ export function Hero() {
       </motion.div>
 
       {/* whoami: solid ink terminal */}
-      <motion.div variants={settle} className="rounded-[var(--radius-tile)] border border-transparent bg-solid p-7 font-mono text-sm leading-7 text-white/90 dark:border-line">
+      <motion.div variants={settle} className="rounded-[var(--radius-tile)] border border-transparent bg-solid p-7 font-mono text-sm leading-7 text-white/90 transition-transform duration-300 hover:-translate-y-0.5 dark:border-line">
         <p>
           <span className="text-white/45">$</span> whoami
         </p>

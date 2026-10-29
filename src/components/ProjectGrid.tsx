@@ -87,10 +87,12 @@ export function ProjectGrid({ repos }: { repos: Repo[] }) {
             <motion.li
               key={repo.id}
               layout
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "0px 0px -60px 0px" }}
               exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              // Staggered by column so a row of cards settles left to right.
+              transition={{ type: "spring", stiffness: 300, damping: 30, delay: (i % 3) * 0.06 }}
               className={i === 0 ? "sm:col-span-2" : ""}
             >
               <ProjectCard repo={repo} featured={i === 0} />
@@ -126,7 +128,7 @@ function ProjectCard({ repo, featured }: { repo: Repo; featured: boolean }) {
   const homepage = safeHomepage(repo.homepage);
 
   return (
-    <article className={`tile relative flex h-full flex-col p-6 transition-colors duration-150 hover:border-ink/40 ${featured ? "sm:p-8" : ""}`}>
+    <article className={`tile relative flex h-full flex-col p-6 transition duration-200 hover:-translate-y-0.5 hover:border-ink/40 ${featured ? "sm:p-8" : ""}`}>
       <div className="flex items-start justify-between gap-4">
         <h3 className={`font-medium tracking-tight ${featured ? "text-2xl" : "text-lg"}`}>
           {/* Stretched link: the whole card opens the repo, while the homepage link sits above it. */}
