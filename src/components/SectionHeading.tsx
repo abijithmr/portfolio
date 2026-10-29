@@ -8,11 +8,11 @@ interface SectionHeadingProps {
 
 export function SectionHeading({ id, title, children }: SectionHeadingProps) {
   return (
-    <div className="mb-10 max-w-2xl">
-      <h2 id={id} className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">
+    <div className="max-w-2xl">
+      <h2 id={id} className="text-3xl font-medium tracking-[-0.03em] sm:text-4xl">
         {title}
       </h2>
-      {children && <p className="mt-3 text-lg leading-relaxed text-mist">{children}</p>}
+      {children && <p className="mt-2 text-slate">{children}</p>}
     </div>
   );
 }

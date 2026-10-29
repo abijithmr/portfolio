@@ -2,209 +2,99 @@
 
 /*
  * Tailwind v4 is configured in CSS rather than tailwind.config.js.
- * Everything in @theme becomes a utility: --color-ink -> bg-ink / text-ink,
- * --font-display -> font-display, and so on.
+ * Everything in @theme becomes a utility: --color-cobalt -> bg-cobalt, etc.
+ *
+ * Palette "Paper and cobalt": flat, solid fills only. Hierarchy comes from
+ * solid color blocks, type and spacing, never from gradients or glows.
  */
 @theme {
-  /* Deep navy rather than black: glass needs colour behind it to refract. */
-  --color-ink: #060816;
-  --color-ink-raised: #0d1230;
-  --color-frost: #eef1ff;
-  --color-mist: #9aa3c7;
+  --color-canvas: #e9ecef; /* page background */
+  --color-tile: #ffffff; /* cards */
+  --color-ink: #121417; /* text, dark tiles, primary buttons */
+  --color-slate: #5b6470; /* secondary text */
+  --color-line: #d5dae0; /* 1px borders */
+  --color-chip: #eef0f3; /* chip fill */
+  --color-cobalt: #1f45d3; /* accent tile, links, focus */
+  --color-sun: #ffc93c; /* small accent: status dot, email tile */
 
-  /* Aurora accents. They live mostly in the background, and glass surfaces pick them up. */
-  --color-cyan: #6be4ff;
-  --color-violet: #9d8cff;
-  --color-rose: #ff8fc7;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-
-  --radius-glass: 1.75rem;
+  --radius-tile: 1.25rem;
 }
 
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
-  color-scheme: dark;
 }
 
 body {
-  background: var(--color-ink);
-  color: var(--color-frost);
+  background: var(--color-canvas);
+  color: var(--color-ink);
 }
 
 ::selection {
-  background: rgb(157 140 255 / 0.4);
+  background: var(--color-sun);
+  color: var(--color-ink);
 }
 
-/* ---------------------------------------------------------------------------
- * Liquid glass
- *
- * A glass surface is built from four layers, back to front:
- *   1. backdrop-filter: blur + saturate the content *behind* the element.
- *      Saturation keeps the aurora colours vivid instead of washing them out,
- *      which is what makes Apple's materials look "wet" rather than foggy.
- *   2. A translucent white gradient fill. Lighter at the top-left suggests a
- *      light source above the surface.
- *   3. ::before is the edge light: a 1px gradient ring cut out with a mask,
- *      bright where light would catch the bevel and fading along the sides.
- *   4. ::after is the specular highlight: a soft radial glow that follows the
- *      pointer (via --mx / --my, set by <Glass />) and fades in on hover.
- * ------------------------------------------------------------------------- */
 @layer components {
+  /* Solid tile: the basic building block of the bento grid. */
+  .tile {
+    border-radius: var(--radius-tile);
+    background: var(--color-tile);
+    border: 1px solid var(--color-line);
+  }
+
+  /*
+   * Apple-style glass, reserved for chrome that floats over solid content
+   * (nav, segmented control, photo badge), the way iOS uses its materials.
+   *   - translucent fill lets the content underneath show through
+   *   - saturate(1.8) keeps colors behind it vivid instead of washed out
+   *   - blur(20px) frosts it; the inset top line is light catching the edge
+   */
   .glass {
-    position: relative;
-    isolation: isolate;
-    border-radius: var(--radius-glass);
-
-    /* 2. translucent body */
-    background: linear-gradient(
-      145deg,
-      rgb(255 255 255 / 0.11) 0%,
-      rgb(255 255 255 / 0.04) 45%,
-      rgb(255 255 255 / 0.02) 100%
-    );
-
-    /* 1. frosted backdrop */
-    -webkit-backdrop-filter: blur(22px) saturate(170%);
-    backdrop-filter: blur(22px) saturate(170%);
-
-    /* Inner top highlight + soft drop shadow that lifts the pane off the page */
+    background: rgb(255 255 255 / 0.72);
+    -webkit-backdrop-filter: saturate(1.8) blur(20px);
+    backdrop-filter: saturate(1.8) blur(20px);
+    border: 1px solid rgb(255 255 255 / 0.6);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.22),
-      inset 0 -1px 0 rgb(255 255 255 / 0.04),
-      0 24px 60px -24px rgb(2 4 16 / 0.85);
+      inset 0 1px 0 rgb(255 255 255 / 0.8),
+      0 1px 2px rgb(18 20 23 / 0.08);
   }
 
-  /* 3. edge lighting */
-  .glass::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    padding: 1px;
-    border-radius: inherit;
-    background: linear-gradient(
-      150deg,
-      rgb(255 255 255 / 0.55) 0%,
-      rgb(255 255 255 / 0.08) 30%,
-      rgb(255 255 255 / 0.02) 60%,
-      rgb(107 228 255 / 0.3) 100%
-    );
-    /* Keep only the 1px padding ring: content-box minus border-box */
-    -webkit-mask:
-      linear-gradient(#000 0 0) content-box,
-      linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-      linear-gradient(#000 0 0) content-box exclude,
-      linear-gradient(#000 0 0);
-    pointer-events: none;
-  }
-
-  /* 4. pointer-tracked specular highlight */
-  .glass::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    border-radius: inherit;
-    background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, 0%),
-      rgb(255 255 255 / 0.12),
-      transparent 45%
-    );
-    opacity: 0;
-    transition: opacity 400ms ease;
-    pointer-events: none;
-  }
-
-  .glass:hover::after,
-  .glass:focus-within::after {
-    opacity: 1;
-  }
-
-  /* Thinner material for pills and buttons: less blur, tighter radius. */
-  .glass-pill {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     border-radius: 9999px;
-    background: rgb(255 255 255 / 0.07);
-    -webkit-backdrop-filter: blur(16px) saturate(160%);
-    backdrop-filter: blur(16px) saturate(160%);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.2),
-      inset 0 0 0 1px rgb(255 255 255 / 0.1);
+    font-weight: 500;
     transition:
-      background-color 250ms ease,
-      box-shadow 250ms ease,
-      transform 250ms ease;
+      background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+      color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+      transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  .glass-pill:hover {
-    background: rgb(255 255 255 / 0.13);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.3),
-      inset 0 0 0 1px rgb(255 255 255 / 0.18),
-      0 0 24px -6px rgb(107 228 255 / 0.45);
-  }
-
-  /* Solid, luminous primary button: the one place light is "emitted". */
-  .btn-primary {
-    border-radius: 9999px;
-    color: var(--color-ink);
-    background: linear-gradient(180deg, #ffffff 0%, #d9e2ff 100%);
-    box-shadow:
-      inset 0 -2px 0 rgb(6 8 22 / 0.12),
-      0 10px 30px -10px rgb(107 228 255 / 0.7);
-    transition:
-      transform 250ms ease,
-      box-shadow 250ms ease;
-  }
-
-  .btn-primary:hover {
-    box-shadow:
-      inset 0 -2px 0 rgb(6 8 22 / 0.12),
-      0 14px 40px -10px rgb(157 140 255 / 0.9);
+  .btn:active {
+    transform: scale(0.97);
   }
 }
 
-/* Visible keyboard focus on every interactive element. */
 :where(a, button):focus-visible {
-  outline: 2px solid var(--color-cyan);
+  outline: 2px solid var(--color-cobalt);
   outline-offset: 3px;
-}
-
-/* ---------------------------------------------------------------------------
- * Aurora background: three blurred colour fields drifting slowly.
- * ------------------------------------------------------------------------- */
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(6%, 4%, 0) scale(1.12);
-  }
-}
-
-.aurora {
-  animation: drift 26s ease-in-out infinite;
-  will-change: transform;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .aurora {
-    animation: none;
-  }
 }
 
-/* Browsers without backdrop-filter get a more opaque fill so text stays legible. */
+/* Without backdrop-filter, glass falls back to an opaque fill so text stays legible. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass,
-  .glass-pill {
-    background: rgb(20 26 58 / 0.92);
+  .glass {
+    background: rgb(255 255 255 / 0.96);
   }
 }

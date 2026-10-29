@@ -3,51 +3,43 @@
 import Image from "next/image";
 import { motion, type Variants } from "motion/react";
 import { avatarUrl, profile } from "@/data/profile";
-import { Glass } from "./Glass";
 import { FileIcon, GitHubIcon, LinkedInIcon, MailIcon } from "./icons";
 
-// The page's one orchestrated load sequence: children rise out of a blur in turn.
-const container: Variants = {
+// The page's one orchestrated load sequence: the bento tiles settle in turn.
+const grid: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.2 } },
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
 };
 
-const rise: Variants = {
-  hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { type: "spring", stiffness: 120, damping: 20 },
-  },
+const settle: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 160, damping: 22 } },
 };
 
 export function Hero() {
   const { education, links } = profile;
 
   return (
-    <section id="top" className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-32 sm:px-6 md:grid-cols-[1.25fr_1fr] md:pt-40 lg:gap-16">
-      <motion.div variants={container} initial="hidden" animate="show">
-        <motion.p variants={rise} className="text-lg text-mist">
-          {profile.role}
-        </motion.p>
+    <motion.section
+      id="top"
+      aria-label="Introduction"
+      variants={grid}
+      initial="hidden"
+      animate="show"
+      className="mx-auto grid max-w-6xl gap-4 px-4 pt-28 sm:px-6 md:grid-cols-3 md:pt-32"
+    >
+      {/* Name tile */}
+      <motion.div variants={settle} className="tile flex flex-col justify-between p-7 sm:p-10 md:col-span-2">
+        <div>
+          <p className="text-slate">{profile.role}</p>
+          <h1 className="mt-3 text-[clamp(2.75rem,7vw,5rem)] font-medium leading-[0.95] tracking-[-0.045em]">
+            {profile.name}
+          </h1>
+          <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-slate">{profile.tagline}</p>
+        </div>
 
-        {/* Name set large and tight; the gradient fill reads like light on a glass edge. */}
-        <h1 className="mt-3 font-display text-[clamp(3.25rem,10vw,7rem)] font-semibold leading-[0.9] tracking-[-0.045em]">
-          <motion.span variants={rise} className="block bg-linear-to-br from-white via-white to-mist bg-clip-text text-transparent">
-            {profile.firstName}
-          </motion.span>
-          <motion.span variants={rise} className="block bg-linear-to-br from-white/90 via-violet to-cyan bg-clip-text text-transparent">
-            {profile.lastName}
-          </motion.span>
-        </h1>
-
-        <motion.p variants={rise} className="mt-6 max-w-[38ch] text-lg leading-relaxed text-frost/80 sm:text-xl">
-          {profile.tagline}
-        </motion.p>
-
-        <motion.div variants={rise} className="mt-8 flex flex-wrap items-center gap-3">
-          <a href={`mailto:${links.email}`} className="btn-primary inline-flex items-center gap-2 px-5 py-3 font-medium hover:-translate-y-0.5">
+        <div className="mt-8 flex flex-wrap items-center gap-2.5">
+          <a href={`mailto:${links.email}`} className="btn bg-ink px-5 py-3 text-white hover:bg-cobalt">
             <MailIcon className="size-4.5" />
             Email me
           </a>
@@ -55,56 +47,77 @@ export function Hero() {
             href={links.resume}
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-pill inline-flex items-center gap-2 px-5 py-3 font-medium hover:-translate-y-0.5"
+            className="btn border border-line px-5 py-3 hover:bg-chip"
           >
             <FileIcon className="size-4.5" />
             View resume
           </a>
-          <a href={links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="glass-pill grid size-12 place-items-center hover:-translate-y-0.5">
+          <a href={links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="btn size-12 border border-line hover:bg-chip">
             <GitHubIcon className="size-5" />
           </a>
-          <a href={links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="glass-pill grid size-12 place-items-center hover:-translate-y-0.5">
+          <a href={links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="btn size-12 border border-line hover:bg-chip">
             <LinkedInIcon className="size-5" />
           </a>
-        </motion.div>
+        </div>
       </motion.div>
 
-      {/* Portrait behind glass, with the education card floating over its lower edge. */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.92, filter: "blur(16px)" }}
-        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-        transition={{ type: "spring", stiffness: 90, damping: 18, delay: 0.35 }}
-        className="relative mx-auto w-full max-w-sm"
+      {/* Photo tile, with a frosted badge floating over the image */}
+      <motion.div variants={settle} className="relative aspect-square overflow-hidden rounded-[var(--radius-tile)] bg-chip md:aspect-auto">
+        <Image
+          src={avatarUrl}
+          alt={`Portrait of ${profile.name}`}
+          fill
+          priority
+          sizes="(min-width: 768px) 360px, 100vw"
+          className="object-cover"
+        />
+        <p className="glass absolute bottom-3 left-3 flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium">
+          <span aria-hidden className="size-2 rounded-full bg-sun" />
+          {education.status}, graduating {education.graduation}
+        </p>
+      </motion.div>
+
+      {/* Education: solid cobalt */}
+      <motion.div variants={settle} className="rounded-[var(--radius-tile)] bg-cobalt p-7 text-white">
+        <h2 className="text-xl font-medium tracking-tight">Education</h2>
+        <p className="mt-4 font-medium leading-snug">{education.degree}</p>
+        <p className="mt-2 text-sm leading-relaxed text-white/80">
+          {education.college}, {education.university}
+        </p>
+        <p className="mt-3 text-sm text-white/80">{education.location}</p>
+      </motion.div>
+
+      {/* whoami: solid ink terminal */}
+      <motion.div variants={settle} className="rounded-[var(--radius-tile)] bg-ink p-7 font-mono text-sm leading-7 text-white/90">
+        <p>
+          <span className="text-white/45">$</span> whoami
+        </p>
+        <p>
+          role: <span className="text-white">{profile.role.toLowerCase()}</span>
+        </p>
+        <p>
+          location: <span className="text-white">Kerala, India</span>
+        </p>
+        <p>
+          status: <span className="text-sun">graduating {education.graduation}</span>
+        </p>
+        <p className="mt-1 text-white/45">
+          <span className="inline-block h-4 w-2 translate-y-0.5 bg-white/70 motion-safe:animate-pulse" />
+        </p>
+      </motion.div>
+
+      {/* Email: solid sun */}
+      <motion.a
+        variants={settle}
+        href={`mailto:${links.email}`}
+        className="group flex flex-col justify-between rounded-[var(--radius-tile)] bg-sun p-7 transition-transform duration-300 hover:-translate-y-0.5"
       >
-        <Glass className="p-3">
-          <div className="relative aspect-square overflow-hidden rounded-[1.25rem]">
-            <Image
-              src={avatarUrl}
-              alt={`Portrait of ${profile.name}`}
-              fill
-              priority
-              sizes="(min-width: 768px) 360px, 80vw"
-              className="object-cover"
-            />
-            {/* Sheen across the photo so it sits *under* the glass rather than on top. */}
-            <div aria-hidden className="absolute inset-0 bg-linear-to-br from-white/20 via-transparent to-ink/40" />
-          </div>
-        </Glass>
-
-        <Glass className="relative -mt-14 mx-4 p-5 sm:mx-6">
-          <p className="flex items-center gap-2 text-sm text-cyan">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-cyan opacity-60 motion-reduce:animate-none" />
-              <span className="relative inline-flex size-2 rounded-full bg-cyan" />
-            </span>
-            {education.status}, graduating {education.graduation}
-          </p>
-          <p className="mt-2 font-medium leading-snug">{education.degree}</p>
-          <p className="mt-1 text-sm leading-relaxed text-mist">
-            {education.college}, {education.university}, {education.location}
-          </p>
-        </Glass>
-      </motion.div>
-    </section>
+        <MailIcon className="size-6" />
+        <div className="mt-8">
+          <p className="text-xl font-medium tracking-tight">Let&apos;s talk</p>
+          <p className="mt-1 break-all text-sm text-ink/75 group-hover:underline">{links.email}</p>
+        </div>
+      </motion.a>
+    </motion.section>
   );
 }

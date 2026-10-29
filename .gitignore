@@ -45,3 +45,8 @@ CLAUDE.md
 
 # playwright screenshots
 /.playwright-mcp
+
+
+# superdesign: keep only the design system
+/.superdesign/*
+!/.superdesign/design-system.md
