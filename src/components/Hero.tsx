@@ -39,18 +39,13 @@ export function Hero() {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center gap-2.5">
-          <a href={`mailto:${links.email}`} className="btn bg-ink px-5 py-3 text-white hover:bg-cobalt">
+          <a href={`mailto:${links.email}`} className="btn bg-btn px-5 py-3 text-on-btn hover:bg-cobalt hover:text-white">
             <MailIcon className="size-4.5" />
             Email me
           </a>
-          <a
-            href={links.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn border border-line px-5 py-3 hover:bg-chip"
-          >
+          <a href={links.resume} download={profile.resumeFileName} className="btn border border-line px-5 py-3 hover:bg-chip">
             <FileIcon className="size-4.5" />
-            View resume
+            Download resume
           </a>
           <a href={links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="btn size-12 border border-line hover:bg-chip">
             <GitHubIcon className="size-5" />
@@ -61,20 +56,24 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {/* Photo tile, with a frosted badge floating over the image */}
-      <motion.div variants={settle} className="relative aspect-square overflow-hidden rounded-[var(--radius-tile)] bg-chip md:aspect-auto">
-        <Image
-          src={avatarUrl}
-          alt={`Portrait of ${profile.name}`}
-          fill
-          priority
-          sizes="(min-width: 768px) 360px, 100vw"
-          className="object-cover"
-        />
-        <p className="glass absolute bottom-3 left-3 flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-medium">
-          <span aria-hidden className="size-2 rounded-full bg-sun" />
-          {education.status}, graduating {education.graduation}
-        </p>
+      {/* Photo tile: circular portrait with a frosted badge floating over its lower edge */}
+      <motion.div variants={settle} className="tile flex items-center justify-center p-8">
+        <div className="relative">
+          <div className="relative size-44 overflow-hidden rounded-full bg-chip ring-1 ring-line sm:size-52">
+            <Image
+              src={avatarUrl}
+              alt={`Portrait of ${profile.name}`}
+              fill
+              priority
+              sizes="208px"
+              className="object-cover"
+            />
+          </div>
+          <p className="glass absolute -bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium">
+            <span aria-hidden className="size-2 rounded-full bg-sun" />
+            {education.status}, graduating {education.graduation}
+          </p>
+        </div>
       </motion.div>
 
       {/* Education: solid cobalt */}
@@ -88,7 +87,7 @@ export function Hero() {
       </motion.div>
 
       {/* whoami: solid ink terminal */}
-      <motion.div variants={settle} className="rounded-[var(--radius-tile)] bg-ink p-7 font-mono text-sm leading-7 text-white/90">
+      <motion.div variants={settle} className="rounded-[var(--radius-tile)] border border-transparent bg-solid p-7 font-mono text-sm leading-7 text-white/90 dark:border-line">
         <p>
           <span className="text-white/45">$</span> whoami
         </p>
@@ -110,12 +109,12 @@ export function Hero() {
       <motion.a
         variants={settle}
         href={`mailto:${links.email}`}
-        className="group flex flex-col justify-between rounded-[var(--radius-tile)] bg-sun p-7 transition-transform duration-300 hover:-translate-y-0.5"
+        className="group flex flex-col justify-between rounded-[var(--radius-tile)] bg-sun p-7 text-neutral-900 transition-transform duration-300 hover:-translate-y-0.5"
       >
         <MailIcon className="size-6" />
         <div className="mt-8">
           <p className="text-xl font-medium tracking-tight">Let&apos;s talk</p>
-          <p className="mt-1 break-all text-sm text-ink/75 group-hover:underline">{links.email}</p>
+          <p className="mt-1 break-all text-sm text-neutral-900/75 group-hover:underline">{links.email}</p>
         </div>
       </motion.a>
     </motion.section>

@@ -24,6 +24,7 @@ export const profile = {
     // Drop the PDF at public/resume.pdf.
     resume: "/resume.pdf",
   },
+  resumeFileName: "Abijith-Rajeevan-Resume.pdf",
 } as const;
 
 export const avatarUrl = `https://github.com/${profile.githubUser}.png`;

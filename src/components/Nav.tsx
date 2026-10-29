@@ -1,4 +1,5 @@
 import { profile } from "@/data/profile";
+import { ThemeToggle } from "./ThemeToggle";
 
 const sections = [
   { href: "#projects", label: "Projects" },
@@ -10,30 +11,26 @@ const sections = [
 export function Nav() {
   return (
     <header className="fixed inset-x-0 top-4 z-50 flex justify-center px-4">
-      <nav aria-label="Primary" className="glass flex w-full max-w-xl items-center justify-between rounded-full py-1.5 pl-5 pr-1.5">
-        <a href="#top" className="text-sm font-semibold tracking-tight">
-          {profile.firstName}
-          <span className="text-slate">.dev</span>
-        </a>
-        <ul className="flex items-center gap-0.5 text-sm">
+      <nav aria-label="Primary" className="glass flex w-fit items-center gap-2 rounded-full p-1.5 sm:gap-6">
+        <ul className="hidden items-center text-sm sm:flex sm:pl-2">
           {sections.map((s) => (
-            <li key={s.href} className="hidden sm:block">
+            <li key={s.href}>
               <a href={s.href} className="rounded-full px-3 py-1.5 text-slate transition-colors hover:text-ink">
                 {s.label}
               </a>
             </li>
           ))}
-          <li>
-            <a
-              href={profile.links.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn ml-1 bg-ink px-4 py-1.5 text-white hover:bg-cobalt"
-            >
-              Resume
-            </a>
-          </li>
         </ul>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <a
+            href={profile.links.resume}
+            download={profile.resumeFileName}
+            className="btn bg-btn px-4 py-1.5 text-sm text-on-btn hover:bg-cobalt hover:text-white"
+          >
+            Resume
+          </a>
+        </div>
       </nav>
     </header>
   );

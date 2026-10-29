@@ -65,12 +65,12 @@ export function ProjectGrid({ repos }: { repos: Repo[] }) {
               role="radio"
               aria-checked={sort === opt.key}
               onClick={() => setSort(opt.key)}
-              className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${sort === opt.key ? "text-white" : "text-slate hover:text-ink"}`}
+              className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${sort === opt.key ? "text-on-btn" : "text-slate hover:text-ink"}`}
             >
               {sort === opt.key && (
                 <motion.span
                   layoutId="sort-indicator"
-                  className="absolute inset-0 rounded-full bg-ink"
+                  className="absolute inset-0 rounded-full bg-btn"
                   transition={{ type: "spring", stiffness: 400, damping: 32 }}
                 />
               )}
@@ -134,7 +134,7 @@ function ProjectCard({ repo, featured }: { repo: Repo; featured: boolean }) {
             href={repo.html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="wrap-break-word after:absolute after:inset-0 after:rounded-[inherit] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-3 focus-visible:after:outline-cobalt"
+            className="wrap-break-word after:absolute after:inset-0 after:rounded-[inherit] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-3 focus-visible:after:outline-link"
           >
             {repo.name}
           </a>
@@ -177,7 +177,7 @@ function ProjectCard({ repo, featured }: { repo: Repo; featured: boolean }) {
             href={homepage}
             target="_blank"
             rel="noopener noreferrer"
-            className="relative z-10 flex items-center gap-1 text-cobalt hover:underline"
+            className="relative z-10 flex items-center gap-1 text-link hover:underline"
           >
             Live site
             <ExternalIcon className="size-3.5" />

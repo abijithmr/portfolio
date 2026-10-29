@@ -25,7 +25,7 @@ async function ProjectList() {
         </h2>
         <p className="tile mt-8 max-w-xl p-6 text-slate">
           {ok ? "No public repositories yet." : "GitHub didn't return the repository list just now."}{" "}
-          <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className="text-cobalt underline underline-offset-4">
+          <a href={profile.links.github} target="_blank" rel="noopener noreferrer" className="text-link underline underline-offset-4">
             See them on GitHub
           </a>
           .

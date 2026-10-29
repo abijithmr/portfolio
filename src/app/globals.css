@@ -1,21 +1,66 @@
 @import "tailwindcss";
 
+/* `dark:` utilities follow the data-theme attribute set on <html> (see ThemeToggle and the script in layout.tsx). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 /*
- * Tailwind v4 is configured in CSS rather than tailwind.config.js.
- * Everything in @theme becomes a utility: --color-cobalt -> bg-cobalt, etc.
- *
- * Palette "Paper and cobalt": flat, solid fills only. Hierarchy comes from
- * solid color blocks, type and spacing, never from gradients or glows.
+ * Palette "Paper and cobalt" (light) and "Ink and cobalt" (dark).
+ * Flat, solid fills only: hierarchy comes from color blocks, type and spacing,
+ * never from gradients or glows. Each token is defined once per theme, and the
+ * Tailwind utilities (bg-tile, text-slate, ...) read them through @theme inline.
  */
-@theme {
-  --color-canvas: #e9ecef; /* page background */
-  --color-tile: #ffffff; /* cards */
-  --color-ink: #121417; /* text, dark tiles, primary buttons */
-  --color-slate: #5b6470; /* secondary text */
-  --color-line: #d5dae0; /* 1px borders */
-  --color-chip: #eef0f3; /* chip fill */
-  --color-cobalt: #1f45d3; /* accent tile, links, focus */
-  --color-sun: #ffc93c; /* small accent: status dot, email tile */
+:root {
+  --canvas: #e9ecef; /* page background */
+  --tile: #ffffff; /* cards */
+  --ink: #121417; /* primary text */
+  --slate: #5b6470; /* secondary text */
+  --line: #d5dae0; /* 1px borders */
+  --chip: #eef0f3; /* chip fill, hover fill */
+  --cobalt: #1f45d3; /* accent tile, focus ring */
+  --link: #1f45d3; /* link text */
+  --solid: #121417; /* dark tiles: terminal, contact block */
+  --btn: #121417; /* primary button fill */
+  --on-btn: #ffffff; /* primary button text */
+
+  /* Glass: translucent page color, so whatever scrolls underneath shows through. */
+  --glass-bg: rgb(255 255 255 / 0.72);
+  --glass-border: rgb(255 255 255 / 0.6);
+  --glass-highlight: rgb(255 255 255 / 0.8);
+  --glass-shadow: rgb(18 20 23 / 0.08);
+}
+
+:root[data-theme="dark"] {
+  --canvas: #0b0e14;
+  --tile: #141923;
+  --ink: #eceff4;
+  --slate: #9aa4b5;
+  --line: #232b3a;
+  --chip: #1d2431;
+  --cobalt: #3556e6;
+  --link: #8aa2ff;
+  --solid: #05070b;
+  --btn: #eceff4;
+  --on-btn: #0b0e14;
+
+  --glass-bg: rgb(20 25 35 / 0.7);
+  --glass-border: rgb(255 255 255 / 0.08);
+  --glass-highlight: rgb(255 255 255 / 0.08);
+  --glass-shadow: rgb(0 0 0 / 0.4);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-tile: var(--tile);
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-line: var(--line);
+  --color-chip: var(--chip);
+  --color-cobalt: var(--cobalt);
+  --color-link: var(--link);
+  --color-solid: var(--solid);
+  --color-btn: var(--btn);
+  --color-on-btn: var(--on-btn);
+  --color-sun: #ffc93c; /* same in both themes: status dot, email tile */
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
@@ -26,24 +71,29 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 6rem;
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--color-canvas);
-  color: var(--color-ink);
+  background: var(--canvas);
+  color: var(--ink);
 }
 
 ::selection {
   background: var(--color-sun);
-  color: var(--color-ink);
+  color: #121417;
 }
 
 @layer components {
   /* Solid tile: the basic building block of the bento grid. */
   .tile {
     border-radius: var(--radius-tile);
-    background: var(--color-tile);
-    border: 1px solid var(--color-line);
+    background: var(--tile);
+    border: 1px solid var(--line);
   }
 
   /*
@@ -54,13 +104,13 @@ body {
    *   - blur(20px) frosts it; the inset top line is light catching the edge
    */
   .glass {
-    background: rgb(255 255 255 / 0.72);
+    background: var(--glass-bg);
     -webkit-backdrop-filter: saturate(1.8) blur(20px);
     backdrop-filter: saturate(1.8) blur(20px);
-    border: 1px solid rgb(255 255 255 / 0.6);
+    border: 1px solid var(--glass-border);
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.8),
-      0 1px 2px rgb(18 20 23 / 0.08);
+      inset 0 1px 0 var(--glass-highlight),
+      0 1px 2px var(--glass-shadow);
   }
 
   .btn {
@@ -82,7 +132,7 @@ body {
 }
 
 :where(a, button):focus-visible {
-  outline: 2px solid var(--color-cobalt);
+  outline: 2px solid var(--link);
   outline-offset: 3px;
 }
 
@@ -95,6 +145,6 @@ body {
 /* Without backdrop-filter, glass falls back to an opaque fill so text stays legible. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass {
-    background: rgb(255 255 255 / 0.96);
+    background: var(--tile);
   }
 }
