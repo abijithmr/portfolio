@@ -36,7 +36,7 @@ Reference: content-first portfolios from github.com/emmabostian/developer-portfo
 Rules: no gradients of any kind (text, background or border). No blurred blobs, glows or colored shadows. Accents are solid blocks.
 
 ## Typography
-- Family: **Geist** (sans) for everything; **Geist Mono** only for genuinely code-like strings (e.g. `github.com/abijithmr`, repo language/stat rows).
+- Family: **Geist Mono** for everything (one uniform, tech-focused monospace across the site).
 - Weights: 500 for display and UI, 400 for body.
 - Scale: display 72–96px / lh 1.0 / ls -0.04em; h2 44px / lh 1.1 / ls -0.03em; body 17px / lh 1.55; small 14–15px.
 - Sentence case everywhere. No all-caps eyebrows. No single-word colored or italic accents.
@@ -45,7 +45,7 @@ Rules: no gradients of any kind (text, background or border). No blurred blobs, 
 Glass only appears where it floats OVER solid colored content, as on iOS/macOS: the sticky nav capsule, the segmented control, and small floating badges over solid tiles or the photo. Cards and tiles are solid, not glass.
 - Glass recipe: translucent fill of the page color at ~70% (dark: rgba(14,26,43,0.7); light: rgba(255,255,255,0.7)), `backdrop-filter: saturate(1.8) blur(20px)`, 1px border in the line color, top inner highlight `inset 0 1px 0 rgba(255,255,255,0.12)`.
 - Shadows: subtle and neutral only, e.g. `0 1px 2px rgba(0,0,0,0.12)`. No colored glow shadows.
-- Radii: tiles 20px, inner media 14px, controls/pills 9999px.
+- Radii: none. All corners are square (tiles, media, buttons, chips).
 
 ## Components
 - Nav: floating centered glass capsule (not full-bleed), 48px tall, brand "Abijith.dev" left, links Projects / Stack / Contact, white capsule "Resume" button right.

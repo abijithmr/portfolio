@@ -1,6 +1,5 @@
 import { profile } from "@/data/profile";
 import { FileIcon, MailIcon } from "./icons";
-import { Reveal } from "./Reveal";
 
 export function Contact() {
   const { links } = profile;
@@ -17,8 +16,8 @@ export function Contact() {
         aria-labelledby="contact-title"
         className="-scroll-mt-24 mx-auto flex min-h-dvh max-w-6xl items-center px-4 pb-16 pt-28 sm:px-6"
       >
-        <Reveal className="w-full rounded-[var(--radius-tile)] border border-transparent bg-solid px-7 py-12 text-white sm:px-12 sm:py-16 dark:border-line">
-          <h2 id="contact-title" className="max-w-[16ch] text-4xl font-medium tracking-[-0.035em] sm:text-6xl">
+        <div className="reveal w-full border border-transparent bg-solid px-7 py-12 text-white sm:px-12 sm:py-16 dark:border-line">
+          <h2 id="contact-title" className="max-w-[16ch] text-4xl font-medium tracking-tight sm:text-5xl">
             Let&apos;s build something together
           </h2>
           <p className="mt-5 max-w-[52ch] text-lg leading-relaxed text-white/70">
@@ -40,7 +39,7 @@ export function Contact() {
               Download resume
             </a>
           </div>
-        </Reveal>
+        </div>
       </section>
 
       <footer className="border-t border-line">

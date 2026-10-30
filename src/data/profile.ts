@@ -30,21 +30,12 @@ export const avatarUrl = `https://github.com/${profile.githubUser}.png`;
 
 export interface StackGroup {
   title: string;
-  accent: "cyan" | "violet" | "rose" | "frost";
   items: string[];
 }
 
 export const techStack: StackGroup[] = [
-  {
-    title: "Languages",
-    accent: "cyan",
-    items: ["JavaScript", "TypeScript", "Python", "Go", "SQL"],
-  },
-  { title: "Front end", accent: "violet", items: ["React", "Next.js", "CSS"] },
-  {
-    title: "Back end",
-    accent: "rose",
-    items: ["Node.js", "REST APIs", "PostgreSQL", "Redis"],
-  },
-  { title: "Tools", accent: "frost", items: ["Git", "Docker", "AWS", "CI/CD"] },
+  { title: "Languages", items: ["JavaScript", "TypeScript", "Python", "Go", "SQL"] },
+  { title: "Front end", items: ["React", "Next.js", "CSS"] },
+  { title: "Back end", items: ["Node.js", "REST APIs", "PostgreSQL", "Redis"] },
+  { title: "Tools", items: ["Git", "Docker", "AWS", "CI/CD"] },
 ];
