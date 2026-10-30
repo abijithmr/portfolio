@@ -26,7 +26,7 @@ export function Contact() {
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a href={`mailto:${links.email}`} className="btn bg-white px-6 py-3.5 text-neutral-900 hover:bg-sun">
+            <a href={`mailto:${links.email}`} className="btn bg-white px-6 py-3.5 text-neutral-900 hover:bg-cobalt hover:text-white">
               <MailIcon className="size-5" />
               {links.email}
             </a>

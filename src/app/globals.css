@@ -60,7 +60,6 @@
   --color-solid: var(--solid);
   --color-btn: var(--btn);
   --color-on-btn: var(--on-btn);
-  --color-sun: #ffc93c; /* same in both themes: status dot, email tile */
 
   /* One monospace family everywhere; font-sans and font-mono resolve to the same stack. */
   --font-sans: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -83,8 +82,8 @@ body {
 }
 
 ::selection {
-  background: var(--color-sun);
-  color: #121417;
+  background: var(--cobalt);
+  color: #ffffff;
 }
 
 @layer components {

@@ -20,44 +20,35 @@ export function Hero() {
           <p className="mt-5 max-w-[46ch] text-lg leading-relaxed text-slate">{profile.tagline}</p>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-2.5">
-          <a href={`mailto:${links.email}`} className="btn bg-btn px-5 py-3 text-on-btn hover:bg-cobalt hover:text-white">
+        <div className="mt-8 grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:items-center">
+          <a href={`mailto:${links.email}`} className="btn col-span-2 bg-btn px-5 py-3 text-on-btn hover:bg-cobalt hover:text-white">
             <MailIcon className="size-4.5" />
             Email me
           </a>
-          <a href={links.resume} download={profile.resumeFileName} className="btn border border-line px-5 py-3 hover:bg-chip">
+          <a href={links.resume} download={profile.resumeFileName} className="btn col-span-2 border border-line px-5 py-3 hover:bg-chip">
             <FileIcon className="size-4.5" />
             Download resume
           </a>
-          <a href={links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="btn size-12 border border-line hover:bg-chip">
+          <a href={links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="btn h-12 border border-line hover:bg-chip sm:w-12">
             <GitHubIcon className="size-5" />
           </a>
-          <a href={links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="btn size-12 border border-line hover:bg-chip">
+          <a href={links.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="btn h-12 border border-line hover:bg-chip sm:w-12">
             <LinkedInIcon className="size-5" />
           </a>
         </div>
       </div>
 
-      {/* Photo tile: square portrait with a frosted badge floating over its lower edge */}
+      {/* Photo tile */}
       <div className="tile settle group flex items-center justify-center p-8 [--i:1]">
-        <div className="relative">
-          <div className="relative size-44 overflow-hidden bg-chip ring-1 ring-line sm:size-52">
-            <Image
-              src={avatarUrl}
-              alt={`Portrait of ${profile.name}`}
-              fill
-              priority
-              sizes="208px"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
-            />
-          </div>
-          <p className="glass absolute -bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap px-3 py-1.5 text-xs font-medium">
-            <span aria-hidden className="relative flex size-2">
-              <span className="absolute inline-flex size-full bg-sun opacity-60 motion-safe:animate-ping" />
-              <span className="relative inline-flex size-2 bg-sun" />
-            </span>
-            {education.status}, graduating {education.graduation}
-          </p>
+        <div className="relative size-44 overflow-hidden bg-chip ring-1 ring-line sm:size-52">
+          <Image
+            src={avatarUrl}
+            alt={`Portrait of ${profile.name}`}
+            fill
+            priority
+            sizes="208px"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
+          />
         </div>
       </div>
 
@@ -83,22 +74,22 @@ export function Hero() {
           location: <span className="text-white">Kerala, India</span>
         </p>
         <p>
-          status: <span className="text-sun">graduating {education.graduation}</span>
+          status: <span className="text-white">graduating {education.graduation}</span>
         </p>
         <p className="mt-1 text-white/45">
           <span className="inline-block h-4 w-2 translate-y-0.5 bg-white/70 motion-safe:animate-pulse" />
         </p>
       </div>
 
-      {/* Email: solid sun */}
+      {/* Email: plain tile that floods cobalt on hover */}
       <a
         href={`mailto:${links.email}`}
-        className="group settle flex flex-col justify-between bg-sun p-7 text-neutral-900 transition-transform duration-300 [--i:4] hover:-translate-y-0.5"
+        className="tile group settle flex flex-col justify-between p-7 transition duration-300 [--i:4] hover:-translate-y-0.5 hover:border-cobalt hover:bg-cobalt hover:text-white"
       >
-        <MailIcon className="size-6" />
+        <MailIcon className="size-6 text-link group-hover:text-white" />
         <div className="mt-8">
           <p className="text-xl font-medium tracking-tight">Let&apos;s talk</p>
-          <p className="mt-1 break-all text-sm text-neutral-900/75 group-hover:underline">{links.email}</p>
+          <p className="mt-1 break-all text-sm text-slate group-hover:text-white/80">{links.email}</p>
         </div>
       </a>
     </section>

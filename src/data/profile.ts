@@ -14,7 +14,6 @@ export const profile = {
     university: "APJ Abdul Kalam Technological University (KTU)",
     location: "Kodakara, Kerala",
     graduation: 2027,
-    status: "Final year",
   },
   links: {
     github: "https://github.com/abijithmr",
