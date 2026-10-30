@@ -13,7 +13,7 @@ export function Hero() {
       className="mx-auto grid max-w-6xl gap-4 px-4 pt-28 sm:px-6 md:grid-cols-3 md:pt-32"
     >
       {/* Name tile */}
-      <div className="tile settle flex flex-col justify-between p-7 [--i:0] sm:p-10 md:col-span-2">
+      <div className="tile settle flex flex-col justify-between p-7 [--i:1] sm:p-10 md:col-span-2 md:[--i:0]">
         <div>
           <p className="text-slate">{profile.role}</p>
           <h1 className="mt-3 text-[clamp(2.25rem,6vw,4.25rem)] font-medium leading-none tracking-tight">{profile.name}</h1>
@@ -38,9 +38,9 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Photo tile */}
-      <div className="tile settle group flex items-center justify-center p-8 [--i:1]">
-        <div className="relative size-44 overflow-hidden bg-chip ring-1 ring-line sm:size-52">
+      {/* Photo tile: first on phones so the face is the first thing on screen, beside the name tile from md up */}
+      <div className="tile settle group order-first flex items-center justify-center p-6 [--i:0] md:order-none md:p-8 md:[--i:1]">
+        <div className="relative size-40 overflow-hidden bg-chip ring-1 ring-line sm:size-52">
           <Image
             src={avatarUrl}
             alt={`Portrait of ${profile.name}`}
