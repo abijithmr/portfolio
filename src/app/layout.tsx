@@ -1,15 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { MotionProvider } from "@/components/MotionProvider";
+import { Geist_Mono } from "next/font/google";
 import { avatarUrl, profile } from "@/data/profile";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
+// One monospace family for the whole site (see --font-sans in globals.css).
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -62,12 +56,12 @@ const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(t!==
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${geistMono.variable} antialiased`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="min-h-dvh overflow-x-hidden font-sans">
-        <MotionProvider>{children}</MotionProvider>
+        {children}
       </body>
     </html>
   );

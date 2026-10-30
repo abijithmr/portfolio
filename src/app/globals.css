@@ -60,12 +60,10 @@
   --color-solid: var(--solid);
   --color-btn: var(--btn);
   --color-on-btn: var(--on-btn);
-  --color-sun: #ffc93c; /* same in both themes: status dot, email tile */
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-
-  --radius-tile: 1.25rem;
+  /* One monospace family everywhere; font-sans and font-mono resolve to the same stack. */
+  --font-sans: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono: var(--font-sans);
 }
 
 html {
@@ -84,14 +82,13 @@ body {
 }
 
 ::selection {
-  background: var(--color-sun);
-  color: #121417;
+  background: var(--cobalt);
+  color: #ffffff;
 }
 
 @layer components {
   /* Solid tile: the basic building block of the bento grid. */
   .tile {
-    border-radius: var(--radius-tile);
     background: var(--tile);
     border: 1px solid var(--line);
   }
@@ -118,7 +115,6 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 9999px;
     font-weight: 500;
     transition:
       background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -135,30 +131,61 @@ body {
   }
 }
 
+/*
+ * Theme switch. ThemeToggle runs it as a View Transition and animates a growing circle on
+ * the new snapshot, so the default cross-fade is turned off and both snapshots just stack.
+ * While it runs, element transitions are disabled so the new snapshot never captures a
+ * half-faded colour.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+[data-theme-switching] *,
+[data-theme-switching] *::before,
+[data-theme-switching] *::after {
+  transition: none !important;
+}
+
 /* Motion is opt-out: everything below only runs for people who haven't asked for reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
-  /* The nav capsule drops in once on load. */
+  /* The nav drops in once on load. */
   .nav-in {
-    animation: nav-in 600ms cubic-bezier(0.23, 1, 0.32, 1) 100ms both;
+    animation: nav-in 600ms cubic-bezier(0.23, 1, 0.32, 1) 100ms backwards;
   }
 
-  /* While the theme flips, colors cross-fade instead of snapping. ThemeToggle adds and removes this class. */
-  .theme-switching,
-  .theme-switching *,
-  .theme-switching *::before,
-  .theme-switching *::after {
-    transition:
-      background-color 300ms ease,
-      border-color 300ms ease,
-      color 300ms ease,
-      fill 300ms ease !important;
+  /* Hero tiles settle in turn; --i is the tile's position in the sequence. */
+  .settle {
+    animation: rise 600ms cubic-bezier(0.23, 1, 0.32, 1) calc(100ms + var(--i, 0) * 70ms) backwards;
+  }
+
+  /*
+   * Content fades up as it scrolls into view, driven by scroll position instead of JS.
+   * Browsers without scroll-driven animations just show it. `backwards` fill (not `both`)
+   * keeps the animation from pinning `translate`, so hover transforms still work afterwards.
+   */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: rise linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
   }
 }
 
 @keyframes nav-in {
   from {
     opacity: 0;
-    transform: translateY(-12px);
+    translate: 0 -12px;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 16px;
   }
 }
 
