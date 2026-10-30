@@ -47,6 +47,5 @@ CLAUDE.md
 /.playwright-mcp
 
 
-# superdesign: keep only the design system
-/.superdesign/*
-!/.superdesign/design-system.md
+# superdesign
+/.superdesign/
