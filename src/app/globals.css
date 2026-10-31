@@ -23,10 +23,13 @@
   --on-btn: #ffffff; /* primary button text */
 
   /* Glass: translucent page color, so whatever scrolls underneath shows through. */
-  --glass-bg: rgb(255 255 255 / 0.72);
-  --glass-border: rgb(255 255 255 / 0.6);
-  --glass-highlight: rgb(255 255 255 / 0.8);
-  --glass-shadow: rgb(18 20 23 / 0.08);
+  --glass-bg: rgb(255 255 255 / 0.55);
+  --glass-border: rgb(255 255 255 / 0.55);
+  --glass-highlight: rgb(255 255 255 / 0.95); /* specular rim, top-left edge */
+  --glass-rim-dim: rgb(255 255 255 / 0.35); /* the opposite edge catches less light */
+  --glass-sheen: rgb(255 255 255 / 0.55);
+  --glass-shadow: rgb(18 20 23 / 0.14);
+  --glass-chip: rgb(255 255 255 / 0.55); /* hover fill for items inside the glass */
 }
 
 :root[data-theme="dark"] {
@@ -42,10 +45,13 @@
   --btn: #eceff4;
   --on-btn: #0b0e14;
 
-  --glass-bg: rgb(20 25 35 / 0.7);
-  --glass-border: rgb(255 255 255 / 0.08);
-  --glass-highlight: rgb(255 255 255 / 0.08);
-  --glass-shadow: rgb(0 0 0 / 0.4);
+  --glass-bg: rgb(30 36 50 / 0.34);
+  --glass-border: rgb(255 255 255 / 0.1);
+  --glass-highlight: rgb(255 255 255 / 0.32);
+  --glass-rim-dim: rgb(255 255 255 / 0.1);
+  --glass-sheen: rgb(255 255 255 / 0.12);
+  --glass-shadow: rgb(0 0 0 / 0.5);
+  --glass-chip: rgb(255 255 255 / 0.12);
 }
 
 @theme inline {
@@ -94,20 +100,47 @@ body {
   }
 
   /*
-   * Apple-style glass, reserved for chrome that floats over solid content
-   * (nav, segmented control, photo badge), the way iOS uses its materials.
-   *   - translucent fill lets the content underneath show through
-   *   - saturate(1.8) keeps colors behind it vivid instead of washed out
-   *   - blur(20px) frosts it; the inset top line is light catching the edge
+   * Liquid glass, reserved for chrome that floats over content (the nav), the way
+   * iOS materials do. A pill, because the material reads as a droplet of glass.
+   *   - a thin fill lets the page underneath show through
+   *   - blur frosts it, saturate + brightness keep colour behind it vivid and luminous
+   *   - inset shadows are the specular rim: light enters top-left, fades bottom-right
+   *   - ::before is a diagonal sheen across the surface; it never blocks clicks
    */
   .glass {
+    position: relative;
+    isolation: isolate;
+    border-radius: 9999px;
     background: var(--glass-bg);
-    -webkit-backdrop-filter: saturate(1.8) blur(20px);
-    backdrop-filter: saturate(1.8) blur(20px);
+    -webkit-backdrop-filter: blur(14px) saturate(1.8) brightness(1.08);
+    backdrop-filter: blur(14px) saturate(1.8) brightness(1.08);
     border: 1px solid var(--glass-border);
     box-shadow:
-      inset 0 1px 0 var(--glass-highlight),
+      inset 1.5px 1.5px 1px -0.5px var(--glass-highlight),
+      inset -1.5px -1.5px 1px -0.5px var(--glass-rim-dim),
+      0 8px 28px var(--glass-shadow),
       0 1px 2px var(--glass-shadow);
+  }
+
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(115deg, var(--glass-sheen) 0%, transparent 38%, transparent 70%, var(--glass-sheen) 100%);
+    opacity: 0.55;
+  }
+
+  /* Items inside the glass: round hover chips that read as lighter glass. */
+  .glass-item {
+    border-radius: 9999px;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-item:hover {
+    background: var(--glass-chip);
   }
 
   .btn {
@@ -200,9 +233,33 @@ body {
   }
 }
 
-/* Without backdrop-filter, glass falls back to an opaque fill so text stays legible. */
+/* Without backdrop-filter, or when the user asks for less transparency, glass becomes an opaque fill so text stays legible. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .glass {
     background: var(--tile);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--tile);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .glass::before {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .glass {
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+  }
+
+  .glass::before {
+    display: none;
   }
 }

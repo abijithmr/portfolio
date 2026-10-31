@@ -53,7 +53,7 @@ export function ThemeToggle() {
   }
 
   return (
-    <button type="button" onClick={toggle} aria-label="Toggle dark mode" className="btn size-10 text-slate hover:bg-chip hover:text-ink">
+    <button type="button" onClick={toggle} aria-label="Toggle dark mode" className="btn glass-item size-10 text-ink">
       <SunIcon className="hidden size-5 dark:block" />
       <MoonIcon className="size-5 dark:hidden" />
     </button>
